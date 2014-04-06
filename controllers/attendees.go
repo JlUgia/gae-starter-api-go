@@ -17,7 +17,6 @@ type Attendee struct {
     CreatedAt   time.Time  `json:"created_at"`
 }
 
-
 func init() {
         http.HandleFunc("/users", handle)
 }
@@ -70,12 +69,8 @@ func decodeObject(body io.ReadCloser) (*Attendee, error) {
 func registerUser(c appengine.Context, attendee *Attendee) (*Attendee, error) {
 
         attendee.CreatedAt = time.Now()
-        key, err := datastore.Put(c, datastore.NewIncompleteKey(c, "attendee", nil), attendee)
+        _, err := datastore.Put(c, datastore.NewIncompleteKey(c, "attendee", nil), attendee)
         if err != nil {
-            return nil, err
-        }
-
-        if err = datastore.Get(c, key, attendee); err != nil {
             return nil, err
         }
 
